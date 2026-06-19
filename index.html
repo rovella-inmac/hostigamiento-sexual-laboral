@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hostigamiento Sexual Laboral · Consorcio Rovella Inmac</title>
+
+<!-- Tipografía: Schibsted Grotesk (display) + Hanken Grotesk (texto) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================================
+   IDENTIDAD (basada en plantillappt.pptx) + MODO CLARO/OSCURO
+   Estilo ANIN (rojo/azul). El "foco" de la portada alterna
+   .mode-light / .mode-dark sobre #deckStage.
+   =========================================================== */
+:root{
+  --font-display:'Schibsted Grotesk', system-ui, sans-serif;
+  --font-body:'Hanken Grotesk', system-ui, sans-serif;
+  --stage-bg:#04060c;
+  --pad:120px;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --dur:.7s;
+}
+#deckStage{
+  --accent:#E10B19;
+  --accent-bright:#FF4D58;
+  --ac-soft:rgba(225,11,25,.12);
+  --green:#1FA463;
+  --green-soft:rgba(31,164,99,.14);
+  --yellow:#F5B301;
+  --red:#D8232A;
+  --red-soft:rgba(216,35,42,.12);
+  --swoosh:linear-gradient(90deg,#FF4D58,#E10B19,#7a0c12);
+}
+/* (Estilo CRI alternativo disponible si se desea reactivar) */
+#deckStage.pal-cri{
+  --accent:#0C6E96; --accent-bright:#34A7D6; --ac-soft:rgba(12,110,150,.12);
+  --green:#009D4F; --green-soft:rgba(0,157,79,.14); --yellow:#FFD100;
+  --swoosh:linear-gradient(90deg,#5B89B4,#009D4F,#FFD100);
+}
+#deckStage.mode-dark{
+  --bg:#06184A; --surface:#0E2566; --surface-2:#0C2059;
+  --txt:#FFFFFF; --txt-2:#A9BBDA; --txt-3:#7E93BC;
+  --line:rgba(255,255,255,.12);
+  --ac:var(--accent-bright);
+  --cover-grad:radial-gradient(120% 130% at 80% -10%, #143a78 0%, #0A2153 45%, #061230 100%);
+  --thanks-grad:radial-gradient(120% 130% at 20% 0%, #143a78 0%, #0A2153 45%, #061230 100%);
+  --shadow:0 26px 50px -38px rgba(0,0,0,.7);
+}
+#deckStage.mode-light{
+  --bg:#F4F6FA; --surface:#FFFFFF; --surface-2:#F0F3F9;
+  --txt:#041643; --txt-2:#5A6577; --txt-3:#8893A7;
+  --line:#E3E8F0;
+  --ac:var(--accent);
+  --cover-grad:linear-gradient(135deg,#FFFFFF 0%,#EDF1F8 55%,#DFE7F4 100%);
+  --thanks-grad:linear-gradient(135deg,#FFFFFF 0%,#EDF1F8 55%,#DFE7F4 100%);
+  --shadow:0 26px 50px -38px rgba(14,26,43,.45);
+}
+
+/* ===========================================================
+   RESET + BASE FIXED-STAGE (viewport-base.css íntegro)
+   =========================================================== */
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--bg,#fff);}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--bg,#fff);transition:background .5s var(--ease),color .5s var(--ease);}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1;}
+img,video,canvas,svg{max-width:100%;max-height:100%;}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000;}
+@media print{
+  html,body{width:1920px;height:auto;overflow:visible;background:#fff;}
+  .deck-viewport{position:static;overflow:visible;background:#fff;}
+  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none;}
+  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .deck-controls,.audio-controls{display:none!important;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important;}}
+
+/* ===========================================================
+   TIPOGRAFÍA BASE
+   =========================================================== */
+.slide{font-family:var(--font-body);color:var(--txt);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.02;letter-spacing:-.02em;color:var(--txt);}
+
+/* ===========================================================
+   CHROME (marca / etiqueta / pie)
+   =========================================================== */
+.brand{position:absolute;top:50px;left:var(--pad);z-index:5;}
+.brand .lg{height:54px;width:auto;flex:none;object-fit:contain;display:block;}
+.brand .lg-dark{display:none;}
+.mode-dark .brand .lg-light{display:none;}
+.mode-dark .brand .lg-dark{display:block;}
+
+.tag{position:absolute;top:60px;right:var(--pad);display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--txt-3);z-index:5;}
+.tag::before{content:"";width:9px;height:9px;background:var(--ac);transform:rotate(45deg);}
+
+.foot{position:absolute;bottom:52px;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-3);z-index:5;font-weight:600;}
+.foot .line{flex:1;height:1px;background:var(--line);margin:0 24px;}
+
+.kicker{display:inline-flex;align-items:center;gap:14px;font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:.28em;text-transform:uppercase;color:var(--ac);margin-bottom:30px;}
+.kicker::before{content:"";width:48px;height:3px;background:var(--ac);}
+
+.hexwm{position:absolute;pointer-events:none;opacity:.07;z-index:0;color:var(--txt);}
+
+/* ===========================================================
+   ANIMACIONES
+   =========================================================== */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);}
+.slide.visible .reveal{opacity:1;transform:none;}
+.slide.visible .d1{transition-delay:.10s;} .slide.visible .d2{transition-delay:.20s;}
+.slide.visible .d3{transition-delay:.30s;} .slide.visible .d4{transition-delay:.40s;}
+.slide.visible .d5{transition-delay:.50s;} .slide.visible .d6{transition-delay:.60s;}
+.slide.visible .d7{transition-delay:.70s;} .slide.visible .d8{transition-delay:.80s;}
+.reveal.scalein{transform:translateY(34px) scale(.96);}
+.slide.visible .reveal.scalein{transform:none;}
+
+/* ===========================================================
+   LAYOUT GENERAL
+   =========================================================== */
+.wrap{position:absolute;inset:0;padding:175px var(--pad) 130px;display:flex;flex-direction:column;}
+h2.title{font-size:74px;max-width:1520px;color:var(--txt);}
+.lead{font-size:30px;line-height:1.5;color:var(--txt-2);max-width:1180px;font-weight:500;}
+
+/* ===========================================================
+   PORTADA
+   =========================================================== */
+.cover{background:var(--cover-grad);}
+.cover .cwrap{position:absolute;inset:0;padding:0 var(--pad);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;z-index:3;}
+.cover .coverlogo{height:104px;width:auto;flex:none;align-self:flex-start;object-fit:contain;display:block;margin-bottom:54px;}
+.cover .coverlogo.lg-dark{display:none;}
+.mode-dark .cover .coverlogo.lg-light{display:none;}
+.mode-dark .cover .coverlogo.lg-dark{display:block;}
+.cover h1{font-size:138px;font-weight:900;line-height:.96;letter-spacing:-.03em;text-transform:uppercase;color:var(--txt);}
+.cover h1 .accent{color:var(--ac);}
+.cover .tagline{margin-top:40px;font-size:33px;font-weight:500;color:var(--txt-2);max-width:1000px;line-height:1.45;border-left:5px solid var(--ac);padding-left:34px;}
+.cover .meta{position:absolute;bottom:84px;right:var(--pad);text-align:right;color:var(--txt-3);font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:15px;line-height:1.9;z-index:3;}
+.cover .ribbon{position:absolute;top:0;right:0;width:46%;height:100%;opacity:.5;background:linear-gradient(135deg, transparent 0%, var(--ac-soft) 100%);clip-path:polygon(38% 0,100% 0,100% 100%,8% 100%);z-index:1;}
+
+/* Foco (toggle de modo claro/oscuro) en la portada */
+.bulb{position:absolute;bottom:80px;left:var(--pad);z-index:6;display:grid;place-items:center;
+  background:color-mix(in srgb, var(--surface) 70%, transparent);border:1px solid var(--line);
+  backdrop-filter:blur(8px);border-radius:50%;width:54px;height:54px;padding:0;cursor:pointer;
+  color:var(--txt-3);transition:color .3s var(--ease),border-color .3s;}
+.bulb svg{width:30px;height:30px;display:block;transition:filter .3s var(--ease);}
+.bulb .bulb-txt{font-family:var(--font-body);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt-2);}
+.bulb .ray{opacity:0;transition:opacity .3s var(--ease);}
+.mode-light .bulb{color:#F5B301;border-color:rgba(245,179,1,.5);}
+.mode-light .bulb svg{filter:drop-shadow(0 0 9px rgba(245,179,1,.7));}
+.mode-light .bulb .ray{opacity:1;}
+.bulb .glass{fill:transparent;transition:fill .3s var(--ease);}
+.mode-light .bulb .glass{fill:rgba(245,179,1,.22);}
+
+/* ===========================================================
+   OBJETIVO
+   =========================================================== */
+.statement h2 em{font-style:normal;color:var(--ac);}
+.quotecard{margin-top:58px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--ac);
+  border-radius:18px;padding:46px 54px;max-width:1340px;box-shadow:var(--shadow);}
+.quotecard p{font-size:28px;line-height:1.55;color:var(--txt);font-weight:500;font-style:italic;}
+
+/* ===========================================================
+   CHIPS
+   =========================================================== */
+.chiprow{display:flex;gap:18px;flex-wrap:wrap;}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 26px;font-size:22px;font-weight:600;color:var(--txt);box-shadow:var(--shadow);}
+
+/* ===========================================================
+   CONDUCTAS
+   =========================================================== */
+.cardgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:12px;}
+.ncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 30px;position:relative;box-shadow:var(--shadow);overflow:hidden;}
+.ncard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--red);}
+.ncard .xh{display:flex;align-items:center;gap:16px;}
+.ncard .xbadge{width:46px;height:46px;border-radius:50%;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:22px;font-weight:800;flex:none;}
+.ncard p{font-size:21px;line-height:1.4;font-weight:600;color:var(--txt);}
+
+/* ===========================================================
+   DIGITAL
+   =========================================================== */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;height:100%;}
+.phone{justify-self:center;width:430px;height:600px;border-radius:46px;background:linear-gradient(180deg,#13243A,#0A1726);border:10px solid #1d3350;box-shadow:0 50px 90px -40px rgba(0,0,0,.7);padding:30px 24px;position:relative;}
+.phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:130px;height:10px;border-radius:8px;background:#26456b;}
+.phone .chatwrap{display:flex;flex-direction:column;margin-top:34px;}
+.bubble{max-width:80%;padding:18px 22px;border-radius:18px;font-size:20px;line-height:1.35;margin:14px 0;font-weight:500;color:#fff;}
+.bubble.them{background:#22364f;border-bottom-left-radius:6px;}
+.bubble.alert{background:rgba(216,35,42,.22);border:1px solid rgba(216,35,42,.55);color:#ffd7da;margin-left:auto;border-bottom-right-radius:6px;}
+.exlist{display:flex;flex-direction:column;gap:22px;}
+.exitem{display:flex;gap:22px;align-items:flex-start;}
+.exitem .dot{width:14px;height:14px;border-radius:50%;background:var(--red);margin-top:9px;flex:none;}
+.exitem p{font-size:25px;line-height:1.4;font-weight:500;color:var(--txt-2);}
+.remember{margin-top:44px;background:var(--red-soft);border:1px solid rgba(216,35,42,.4);border-radius:16px;padding:26px 34px;}
+.remember b{color:var(--red);font-size:15px;letter-spacing:.2em;display:block;margin-bottom:10px;text-transform:uppercase;}
+.remember p{font-size:23px;line-height:1.45;color:var(--txt);font-weight:500;}
+
+/* ===========================================================
+   IMPACTO
+   =========================================================== */
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:20px;}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:44px 46px;box-shadow:var(--shadow);}
+.panel h3{font-size:16px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:14px;}
+.panel.person h3{color:var(--red);} .panel.org h3{color:var(--ac);}
+.taglist{display:flex;flex-wrap:wrap;gap:16px;}
+.pill{padding:16px 26px;border-radius:40px;font-size:24px;font-weight:700;}
+.person .pill{background:var(--red);color:#fff;border:1px solid var(--red);}
+.org .pill{background:var(--red);color:#fff;border:1px solid var(--red);}
+
+/* ===========================================================
+   ACTUAR + CULTURA (lámina combinada 07)
+   =========================================================== */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:8px;}
+.step{position:relative;background:var(--surface);border-radius:16px;padding:26px 24px;border:1px solid var(--line);box-shadow:var(--shadow);}
+.step .num{font-family:var(--font-display);font-weight:900;font-size:44px;color:var(--ac);line-height:1;margin-bottom:12px;}
+.step p{font-size:19px;line-height:1.34;color:var(--txt);font-weight:600;}
+.confnote{margin-top:18px;display:flex;align-items:center;gap:16px;font-size:20px;color:var(--txt-2);font-weight:500;}
+.confnote .bang{color:var(--red);font-weight:800;font-size:26px;}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:26px;}
+.vscol{border-radius:18px;padding:28px 34px;}
+.vscol.good{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 32%, transparent);}
+.vscol.bad{background:var(--red-soft);border:1px solid rgba(216,35,42,.28);}
+.vscol h3{font-size:23px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.vscol.good h3{color:var(--green);} .vscol.bad h3{color:var(--red);}
+.vscol h3 .tk{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;}
+.vscol.good .tk{background:var(--green);} .vscol.bad .tk{background:var(--red);}
+.vsitem{display:flex;align-items:center;gap:16px;font-size:21px;font-weight:600;color:var(--txt);padding:9px 0;}
+.vsitem .m{font-weight:900;font-size:19px;}
+.good .vsitem .m{color:var(--green);} .bad .vsitem .m{color:var(--red);}
+
+/* ===========================================================
+   COMITÉ
+   =========================================================== */
+.committee{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center;height:100%;}
+.bigstat{font-family:var(--font-display);font-weight:900;font-size:118px;color:var(--ac);line-height:.9;}
+.bigstat small{display:block;font-family:var(--font-body);font-weight:600;font-size:26px;color:var(--txt-2);letter-spacing:.02em;margin-top:18px;}
+.purpose{display:flex;flex-direction:column;gap:22px;}
+.purpose .pr{display:flex;gap:20px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 30px;box-shadow:var(--shadow);}
+.purpose .pr .bul{color:var(--ac);font-size:32px;line-height:1.1;flex:none;}
+.purpose .pr p{font-size:23px;line-height:1.4;color:var(--txt);font-weight:500;}
+.purpose .pr b{color:var(--ac);}
+
+/* ===========================================================
+   PARTICIPACIÓN
+   =========================================================== */
+.cta3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:30px;}
+.ctacard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:44px 40px;box-shadow:var(--shadow);}
+.ctacard .vt{width:64px;height:64px;border-radius:16px;background:var(--ac-soft);display:grid;place-items:center;margin-bottom:28px;color:var(--ac);}
+.ctacard .vt svg{width:36px;height:36px;}
+.ctacard h4{font-size:27px;font-weight:800;margin-bottom:14px;color:var(--txt);}
+.ctacard p{font-size:20px;line-height:1.45;color:var(--txt-2);font-weight:500;}
+.callout{margin-top:46px;text-align:center;font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--txt);}
+.callout em{font-style:normal;color:var(--green);}
+
+/* ===========================================================
+   GRACIAS
+   =========================================================== */
+.thanks{background:var(--thanks-grad);}
+.thanks .twrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 var(--pad);z-index:3;}
+.thanks .thlogo{height:104px;width:auto;flex:none;object-fit:contain;margin-bottom:46px;}
+.thanks .thlogo.lg-dark{display:none;}
+.mode-dark .thanks .thlogo.lg-light{display:none;}
+.mode-dark .thanks .thlogo.lg-dark{display:block;}
+.thanks h1{font-size:168px;font-weight:900;color:var(--txt);letter-spacing:-.03em;}
+.thanks .sub{margin-top:28px;font-size:34px;color:var(--txt-2);font-weight:500;max-width:1000px;line-height:1.45;}
+.thanks .barred{width:160px;height:6px;background:var(--swoosh);margin:42px auto 0;border-radius:4px;}
+.thanks .sign{margin-top:54px;color:var(--txt-3);letter-spacing:.18em;text-transform:uppercase;font-weight:600;font-size:17px;}
+
+/* ===========================================================
+   CONTROLES NAV / AUDIO / PROGRESO / EDICIÓN
+   =========================================================== */
+.deck-controls{display:flex;align-items:center;gap:18px;background:rgba(10,21,40,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:40px;padding:10px 18px;}
+.deck-controls button{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;transition:background .2s;}
+.deck-controls button:hover{background:rgba(255,255,255,.16);}
+.deck-controls .count{color:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.08em;min-width:64px;text-align:center;}
+.progress{position:fixed;top:0;left:0;height:4px;background:var(--swoosh);z-index:1200;transition:width .4s var(--ease);}
+
+/* Controles de narración (abajo a la izquierda) */
+/* Barra vertical pegada al lado izquierdo (centrada), orden arriba→abajo:
+   Volumen · Reiniciar · Play/Pausa */
+.audio-controls{position:fixed;left:16px;bottom:22px;z-index:1000;display:flex;flex-direction:column;align-items:center;gap:10px;
+  background:rgba(10,21,40,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:40px;padding:10px;
+  transition:opacity .3s;}
+.audio-controls.disabled{opacity:.4;pointer-events:none;}
+.audio-controls button{background:rgba(255,255,255,.10);border:none;color:#fff;cursor:pointer;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;transition:background .2s;}
+.audio-controls button:hover{background:var(--accent);}
+.audio-controls button svg{width:17px;height:17px;fill:#fff;}
+/* Volumen: botón con popup de barra vertical */
+.avol-wrap{position:relative;display:grid;place-items:center;}
+.avol-pop{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);display:none;
+  background:rgba(10,21,40,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:16px 12px;}
+.avol-pop.show{display:block;}
+.avol{-webkit-appearance:none;appearance:none;writing-mode:vertical-lr;direction:rtl;width:6px;height:120px;border-radius:3px;background:rgba(255,255,255,.25);outline:none;cursor:pointer;}
+.avol::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.15);}
+.avol::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#fff;cursor:pointer;}
+
+.edit-hotzone{position:fixed;top:0;right:0;width:80px;height:80px;z-index:10000;cursor:pointer;}
+.edit-toggle{position:fixed;top:18px;right:18px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,21,40,.8);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10001;}
+.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto;}
+.edit-toggle.active{background:var(--accent);}
+[contenteditable="true"]{outline:2px dashed color-mix(in srgb,var(--accent) 60%, transparent);outline-offset:4px;border-radius:4px;cursor:text;}
+.edit-banner{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 22px;border-radius:30px;font-family:var(--font-body);font-weight:600;font-size:14px;z-index:10001;display:none;}
+.edit-banner.show{display:block;}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck-viewport">
+<main class="deck-stage mode-dark" id="deckStage">
+
+  <!-- ======== LÁMINA 1 · PORTADA (audio1) ======== -->
+  <section class="slide cover active">
+    <div class="ribbon"></div>
+    <svg class="hexwm" style="bottom:-120px;left:-90px;width:620px" viewBox="0 0 100 100"><polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <div class="cwrap">
+      <img class="coverlogo lg-light reveal d1" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac">
+      <img class="coverlogo lg-dark reveal d1" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac">
+      <div class="kicker reveal d2">Capacitación interna · Prevención</div>
+      <h1 class="reveal d3">Hostigamiento<br>sexual <span class="accent">laboral</span></h1>
+      <p class="tagline reveal d4">“Construyamos un ambiente de trabajo basado en el respeto.”</p>
+    </div>
+    <!-- Foco: encendido = modo claro · apagado = modo oscuro -->
+    <button class="bulb reveal d6" id="bulbBtn" title="Encender la luz (modo claro) / apagarla (modo oscuro)" aria-label="Alternar modo claro y oscuro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <g class="ray"><line x1="12" y1="1.5" x2="12" y2="3.5"/><line x1="4" y1="4.8" x2="5.4" y2="6.2"/><line x1="20" y1="4.8" x2="18.6" y2="6.2"/><line x1="1.8" y1="12.5" x2="3.6" y2="12.5"/><line x1="20.4" y1="12.5" x2="22.2" y2="12.5"/></g>
+        <path class="glass" d="M9 17c0-1.5-.7-2.4-1.7-3.6A5.5 5.5 0 1 1 17 10c0 1.9-.8 3-1.7 4-.9 1-1.3 1.6-1.3 3"/>
+        <path d="M9.3 20.5h5.4"/><path d="M10 22.5h4"/>
+      </svg>
+    </button>
+    <div class="meta reveal d5">Consorcio Rovella Inmac<br>Sensibilización interna · 2026</div>
+  </section>
+
+  <!-- ======== LÁMINA 2 · OBJETIVO (audio2) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">02 · Objetivo</div>
+    <div class="wrap">
+      <div class="kicker reveal d1">Objetivo</div>
+      <h2 class="title statement reveal d2">Reconocer las conductas y construir relaciones laborales <em>respetuosas y seguras</em>.</h2>
+      <div class="quotecard reveal d4"><p>“Todos tenemos derecho a trabajar en un ambiente seguro, libre de violencia y basado en el respeto mutuo. Hoy conoceremos qué es el hostigamiento sexual laboral, cómo identificarlo y qué podemos hacer para prevenirlo.”</p></div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 3 · ¿QUÉ ES? (audio3) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">03 · Concepto</div>
+    <div class="wrap">
+      <div class="kicker reveal d1">¿Qué es?</div>
+      <h2 class="title reveal d2" style="font-size:60px;max-width:1600px">Conducta de naturaleza sexual o sexista <span style="color:var(--ac)">no deseada</span>, que afecta la dignidad de la persona o genera un ambiente intimidante, hostil o humillante.</h2>
+      <p class="lead reveal d3" style="margin-top:42px;margin-bottom:24px;font-weight:600;color:var(--txt)">Puede ocurrir:</p>
+      <div class="chiprow reveal d4">
+        <div class="chip">Entre compañeros</div>
+        <div class="chip">Entre jefe y trabajador</div>
+        <div class="chip">Entre hombres y mujeres</div>
+        <div class="chip">Dentro o fuera del centro de trabajo</div>
+        <div class="chip">Presencial o digital</div>
+      </div>
+      <div class="confnote reveal d6" style="margin-top:40px;font-size:24px"><span class="bang" style="font-size:30px">!</span> No es necesario que exista contacto físico para que exista hostigamiento sexual.</div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 4 · CONDUCTAS (audio4) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">04 · Identificar</div>
+    <div class="wrap" style="padding-top:150px">
+      <div class="kicker reveal d1">Ejemplos de conductas inapropiadas</div>
+      <h2 class="title reveal d2" style="font-size:48px;margin-bottom:28px">Lo que para una persona es una “broma”, para otra puede ser ofensivo.</h2>
+      <div class="cardgrid reveal d3">
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Comentarios sobre el cuerpo o la apariencia física</p></div></div>
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Insistir en invitar a salir tras una negativa</p></div></div>
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Bromas o insinuaciones sexuales</p></div></div>
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Preguntas sobre la vida íntima</p></div></div>
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Miradas incómodas o gestos inapropiados</p></div></div>
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Envío de mensajes, imágenes o videos sexuales</p></div></div>
+      </div>
+      <div class="cardgrid reveal d5" style="margin-top:22px;grid-template-columns:1fr">
+        <div class="ncard"><div class="xh"><span class="xbadge">✕</span><p>Contacto físico no deseado</p></div></div>
+      </div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 5 · DIGITAL (audio5) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">05 · Entorno digital</div>
+    <div class="wrap" style="padding-top:150px;padding-bottom:90px">
+      <div class="split">
+        <div>
+          <div class="kicker reveal d1">También en el entorno digital</div>
+          <h2 class="title reveal d2" style="font-size:54px;margin-bottom:38px">Por WhatsApp<br>o redes sociales</h2>
+          <div class="exlist reveal d3">
+            <div class="exitem"><span class="dot"></span><p>Mensajes insistentes fuera del horario laboral</p></div>
+            <div class="exitem"><span class="dot"></span><p>Comentarios sobre fotografías personales</p></div>
+            <div class="exitem"><span class="dot"></span><p>Envío de stickers o imágenes de contenido sexual</p></div>
+            <div class="exitem"><span class="dot"></span><p>Insinuaciones a través de redes sociales</p></div>
+          </div>
+          <div class="remember reveal d5"><b>Recuerda</b><p>Las conductas digitales también forman parte del ámbito laboral cuando involucran a compañeros de trabajo.</p></div>
+        </div>
+        <div class="phone reveal d3 scalein">
+          <div class="chatwrap">
+            <div class="bubble them">Hola, ¿por qué no me respondes? 😏</div>
+            <div class="bubble them">Te ves muy bien en esa foto…</div>
+            <div class="bubble them">Salgamos hoy, no acepto un no 🙄</div>
+            <div class="bubble alert">23:40 · Mensajes fuera de horario</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 6 · IMPACTO (audio6) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">06 · Impacto</div>
+    <div class="wrap">
+      <div class="kicker reveal d1">¿Por qué es importante prevenirlo?</div>
+      <h2 class="title reveal d2" style="font-size:58px;margin-bottom:10px">Afecta a las personas <span style="color:var(--txt-2);font-weight:600">y</span> a la organización.</h2>
+      <div class="twocol">
+        <div class="panel person reveal d3">
+          <h3><span style="color:var(--red)">●</span> En la persona</h3>
+          <div class="taglist"><span class="pill">Estrés</span><span class="pill">Ansiedad</span><span class="pill">Temor</span><span class="pill">Desmotivación</span></div>
+        </div>
+        <div class="panel org reveal d4">
+          <h3><span style="color:var(--ac)">●</span> En la organización</h3>
+          <div class="taglist"><span class="pill">Deteriora el clima laboral</span><span class="pill">Afecta la convivencia</span><span class="pill">Reduce la productividad</span><span class="pill">Consecuencias disciplinarias</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 7 · ACTUAR + CULTURA (audio7) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">07 · Actuar y respetar</div>
+    <div class="wrap" style="padding-top:140px;padding-bottom:110px">
+      <div class="kicker reveal d1">¿Qué hacer si lo observas o experimentas?</div>
+      <h2 class="title reveal d2" style="font-size:46px;margin-bottom:20px">Actúa a tiempo y construye una cultura de respeto</h2>
+      <div class="steps">
+        <div class="step reveal d3"><div class="num">01</div><p>Comunícalo oportunamente</p></div>
+        <div class="step reveal d3"><div class="num">02</div><p>Conserva las evidencias, si las hubiera</p></div>
+        <div class="step reveal d4"><div class="num">03</div><p>Busca orientación en Recursos Humanos</p></div>
+        <div class="step reveal d4"><div class="num">04</div><p>Usa los canales establecidos por la empresa</p></div>
+      </div>
+      <div class="confnote reveal d5"><span class="bang">🔒</span> La confidencialidad y el respeto son fundamentales durante todo el proceso.</div>
+      <div class="vs">
+        <div class="vscol good reveal d6">
+          <h3><span class="tk">✓</span> Promovamos</h3>
+          <div class="vsitem"><span class="m">✓</span> Respeto y trato digno</div>
+          <div class="vsitem"><span class="m">✓</span> Comunicación adecuada y relaciones saludables</div>
+        </div>
+        <div class="vscol bad reveal d6">
+          <h3><span class="tk">✕</span> Evitemos</h3>
+          <div class="vsitem"><span class="m">✕</span> Comentarios ofensivos y bromas inapropiadas</div>
+          <div class="vsitem"><span class="m">✕</span> Conductas invasivas que incomoden a otros</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 8 · COMITÉ (audio8) ======== -->
+  <section class="slide">
+    <svg class="hexwm" style="top:-120px;right:-90px;width:540px" viewBox="0 0 100 100"><polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">08 · Compromiso</div>
+    <div style="position:absolute;inset:0;padding:0 var(--pad)">
+      <div class="committee">
+        <div>
+          <div class="kicker reveal d1">Nuestro compromiso</div>
+          <h2 class="title reveal d2" style="font-size:58px;margin-bottom:34px">Comité de Intervención frente al Hostigamiento Sexual</h2>
+          <div class="bigstat reveal d3">Próximo mes<small>Inicio del proceso de conformación del Comité</small></div>
+        </div>
+        <div class="purpose">
+          <div class="pr reveal d4"><span class="bul">●</span><p><b>Prevenir</b> situaciones de hostigamiento sexual laboral.</p></div>
+          <div class="pr reveal d5"><span class="bul">●</span><p><b>Atender e investigar</b> posibles casos con imparcialidad.</p></div>
+          <div class="pr reveal d6"><span class="bul">●</span><p><b>Garantizar</b> confidencialidad y respeto durante todo el proceso.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 9 · PARTICIPACIÓN (audio9) ======== -->
+  <section class="slide">
+    <div class="brand"><img class="lg lg-light" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac"><img class="lg lg-dark" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac"></div>
+    <div class="tag">09 · Convocatoria</div>
+    <div class="wrap" style="padding-top:150px">
+      <div class="kicker reveal d1">¡Tu participación es importante!</div>
+      <h2 class="title reveal d2" style="font-size:54px;margin-bottom:6px">Elegiremos a los representantes de los trabajadores</h2>
+      <div class="cta3">
+        <div class="ctacard reveal d3">
+          <div class="vt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg></div>
+          <h4>Participa</h4><p>Ejerce tu voto en el proceso electoral.</p>
+        </div>
+        <div class="ctacard reveal d4">
+          <div class="vt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <h4>Postúlate</h4><p>Presenta tu candidatura como representante.</p>
+        </div>
+        <div class="ctacard reveal d5">
+          <div class="vt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a7 7 0 0114 0c0 5.5-7 10-7 10z"/><circle cx="12" cy="11" r="2.5"/></svg></div>
+          <h4>Contribuye</h4><p>Construye un ambiente seguro, respetuoso e inclusivo.</p>
+        </div>
+      </div>
+      <p class="callout reveal d6">Tolerancia cero al hostigamiento. <em>¡Contamos contigo!</em></p>
+    </div>
+    <div class="foot"><span>Prevención del Hostigamiento Sexual Laboral</span><span class="line"></span><span>RR.HH. · Consorcio Rovella Inmac</span></div>
+  </section>
+
+  <!-- ======== LÁMINA 10 · GRACIAS (SIN audio) ======== -->
+  <section class="slide thanks">
+    <svg class="hexwm" style="bottom:-160px;right:-120px;width:700px" viewBox="0 0 100 100"><polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <div class="twrap">
+      <img class="thlogo lg-light reveal d1" src="img/PNG__HORIZONTAL%20SIN%20SLOGAN.png" alt="Consorcio Rovella Inmac">
+      <img class="thlogo lg-dark reveal d1" src="img/PNG__NEGATIVO%20PARCIAL.png" alt="Consorcio Rovella Inmac">
+      <h1 class="reveal d2">Gracias</h1>
+      <div class="barred reveal d3"></div>
+      <p class="sub reveal d4">Juntos fortalecemos una cultura basada en el respeto y la convivencia saludable.</p>
+      <p class="sign reveal d5">Consorcio Rovella Inmac · Prevención del Hostigamiento Sexual Laboral</p>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<!-- Narración (fuera del stage para que sobreviva a la edición en línea) -->
+<audio id="narration" preload="auto"></audio>
+
+<!-- Controles de navegación -->
+<div class="deck-controls">
+  <button id="prevBtn" aria-label="Anterior">‹</button>
+  <span class="count" id="count">01 / 10</span>
+  <button id="nextBtn" aria-label="Siguiente">›</button>
+</div>
+
+<!-- Controles de narración -->
+<div class="audio-controls" id="audioControls">
+  <div class="avol-wrap">
+    <button id="aVolBtn" aria-label="Volumen"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg></button>
+    <div class="avol-pop" id="aVolPop"><input id="aVol" class="avol" type="range" min="0" max="1" step="0.05" value="1" orient="vertical" aria-label="Volumen"></div>
+  </div>
+  <button id="aRestart" aria-label="Reiniciar narración"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+  <button id="aPlay" aria-label="Reproducir / pausar"><svg id="aPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+</div>
+
+<!-- Edición en línea -->
+<div class="edit-hotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Modo edición (E)">✏️</button>
+<div class="edit-banner" id="editBanner">Modo edición · clic en cualquier texto · Ctrl+S para guardar</div>
+
+<script>
+/* ===========================================================
+   NARRACIÓN: 1 audio por lámina (láminas 1–9 = audios 1–9).
+   Lámina 10 sin audio. Al entrar a una lámina se reinicia y
+   reproduce SOLO su audio; al cambiar, se detiene de inmediato.
+   =========================================================== */
+const AUDIO_COUNT=9;
+const narration=document.getElementById('narration');
+const ac=document.getElementById('audioControls');
+const aPlay=document.getElementById('aPlay'), aPlayIcon=document.getElementById('aPlayIcon');
+const aVol=document.getElementById('aVol');
+const ICON_PLAY='M8 5v14l11-7z';
+const ICON_PAUSE='M6 5h4v14H6zM14 5h4v14h-4z';
+let userInteracted=true;   /* permite el autoplay de la lámina 1 al cargar */
+
+function hasAudio(i){return i<AUDIO_COUNT;}
+
+function loadSlideAudio(i,autoplay){
+  narration.pause();
+  try{narration.currentTime=0;}catch(e){}
+  if(hasAudio(i)){
+    ac.classList.remove('disabled');
+    narration.src='audio/audio'+(i+1)+'.mp3';
+    narration.load();
+    try{narration.currentTime=0;}catch(e){}
+    if(autoplay){narration.play().then(()=>setPlayUI(true)).catch(()=>setPlayUI(false));}
+    else{setPlayUI(false);}
+  }else{
+    narration.removeAttribute('src');
+    ac.classList.add('disabled');
+    setPlayUI(false);
+  }
+}
+function setPlayUI(playing){
+  const old=aPlayIcon.querySelector('path'); if(old) old.remove();
+  const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',playing?ICON_PAUSE:ICON_PLAY);
+  aPlayIcon.appendChild(p);
+  ac.classList.toggle('playing',playing);
+}
+aPlay.addEventListener('click',()=>{
+  if(!narration.getAttribute('src'))return;
+  if(narration.paused){narration.play().then(()=>setPlayUI(true)).catch(()=>{});}
+  else{narration.pause();setPlayUI(false);}
+});
+document.getElementById('aRestart').addEventListener('click',()=>{
+  if(!narration.getAttribute('src'))return;
+  narration.currentTime=0;narration.play().then(()=>setPlayUI(true)).catch(()=>{});
+});
+narration.addEventListener('ended',()=>setPlayUI(false));
+
+/* Control de volumen (botón que despliega barra vertical) */
+narration.volume=parseFloat(aVol.value);
+aVol.addEventListener('input',()=>{narration.volume=parseFloat(aVol.value);});
+const aVolPop=document.getElementById('aVolPop');
+document.getElementById('aVolBtn').addEventListener('click',e=>{e.stopPropagation();aVolPop.classList.toggle('show');});
+document.addEventListener('click',e=>{if(!e.target.closest('.avol-wrap'))aVolPop.classList.remove('show');});
+
+/* ===========================================================
+   CONTROLADOR DE DIAPOSITIVAS (fixed 16:9 stage)
+   =========================================================== */
+class SlidePresentation{
+  constructor(){
+    this.slides=[...document.querySelectorAll('.slide')];
+    this.i=0;this.stage=document.getElementById('deckStage');
+    this.count=document.getElementById('count');this.progress=document.getElementById('progress');
+    this.scale();this.nav();this.show(0);
+    window.addEventListener('resize',()=>this.scale());
+  }
+  scale(){const f=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+    this.stage.style.transform=`translate(${(window.innerWidth-1920*f)/2}px,${(window.innerHeight-1080*f)/2}px) scale(${f})`;}
+  show(n){
+    this.i=Math.max(0,Math.min(n,this.slides.length-1));
+    this.slides.forEach((s,k)=>{s.classList.toggle('active',k===this.i);s.classList.toggle('visible',k===this.i);});
+    this.count.textContent=`${String(this.i+1).padStart(2,'0')} / ${String(this.slides.length).padStart(2,'0')}`;
+    this.progress.style.width=((this.i+1)/this.slides.length*100)+'%';
+    loadSlideAudio(this.i, userInteracted);
+  }
+  next(){this.show(this.i+1);} prev(){this.show(this.i-1);}
+  nav(){
+    document.getElementById('nextBtn').onclick=()=>{userInteracted=true;this.next();};
+    document.getElementById('prevBtn').onclick=()=>{userInteracted=true;this.prev();};
+    document.addEventListener('keydown',e=>{
+      if(e.target.getAttribute&&e.target.getAttribute('contenteditable')==='true')return;
+      if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();userInteracted=true;this.next();}
+      if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();userInteracted=true;this.prev();}
+      if(e.key==='Home'){userInteracted=true;this.show(0);} if(e.key==='End'){userInteracted=true;this.show(this.slides.length-1);}});
+    let sx=0;
+    addEventListener('touchstart',e=>sx=e.changedTouches[0].clientX,{passive:true});
+    addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>60){userInteracted=true;dx<0?this.next():this.prev();}},{passive:true});
+    let wl=0;
+    addEventListener('wheel',e=>{const n=Date.now();if(n-wl<700||Math.abs(e.deltaY)<24)return;wl=n;userInteracted=true;e.deltaY>0?this.next():this.prev();},{passive:true});
+  }
+}
+
+/* ===========================================================
+   FOCO: modo claro (encendido) / oscuro (apagado)
+   =========================================================== */
+const stage=document.getElementById('deckStage');
+let mode='dark';
+try{const m=localStorage.getItem('hsl-mode');if(m==='light'||m==='dark')mode=m;}catch(e){}
+function applyMode(){
+  stage.classList.toggle('mode-light',mode==='light');
+  stage.classList.toggle('mode-dark',mode==='dark');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#bulbBtn'))return;
+  userInteracted=true;
+  mode=(mode==='light')?'dark':'light';
+  try{localStorage.setItem('hsl-mode',mode);}catch(err){}
+  applyMode();
+});
+
+/* ===========================================================
+   EDICIÓN EN LÍNEA (botón arriba-derecha · tecla E · Ctrl+S)
+   =========================================================== */
+const editor={isActive:false,
+  toggle(){this.isActive=!this.isActive;
+    document.querySelectorAll('h1,h2,h3,h4,.chip,.pill,.vsitem,.step p,.ncard p,.exitem p,.lead,.quotecard p,.ctacard p,.purpose .pr p,.tagline,.sub').forEach(el=>el.contentEditable=this.isActive);
+    document.getElementById('editToggle').classList.toggle('active',this.isActive);
+    document.getElementById('editBanner').classList.toggle('show',this.isActive);
+    if(!this.isActive)this.save();},
+  save(){try{localStorage.setItem('hsl-deck-v3',document.getElementById('deckStage').innerHTML);}catch(e){}}};
+try{const s=localStorage.getItem('hsl-deck-v3');if(s)document.getElementById('deckStage').innerHTML=s;}catch(e){}
+
+const hot=document.querySelector('.edit-hotzone'),tg=document.getElementById('editToggle');let ht=null;
+hot.addEventListener('mouseenter',()=>{clearTimeout(ht);tg.classList.add('show');});
+hot.addEventListener('mouseleave',()=>{ht=setTimeout(()=>{if(!editor.isActive)tg.classList.remove('show');},400);});
+tg.addEventListener('mouseenter',()=>clearTimeout(ht));
+tg.addEventListener('mouseleave',()=>{ht=setTimeout(()=>{if(!editor.isActive)tg.classList.remove('show');},400);});
+tg.addEventListener('click',()=>editor.toggle());
+hot.addEventListener('click',()=>editor.toggle());
+document.addEventListener('keydown',e=>{
+  if((e.key==='e'||e.key==='E')&&e.target.getAttribute('contenteditable')!=='true')editor.toggle();
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();editor.save();const b=document.getElementById('editBanner');b.textContent='✓ Cambios guardados';setTimeout(()=>b.textContent='Modo edición · clic en cualquier texto · Ctrl+S para guardar',1400);}
+});
+
+/* ===========================================================
+   INICIO
+   =========================================================== */
+applyMode();
+setPlayUI(false);
+const deck=new SlidePresentation();
+
+/* La lámina 1 intenta reproducir audio1 al cargar. Si el navegador
+   bloquea el autoplay con sonido, se reintenta en la 1ª interacción. */
+function autoplayFirst(){ if(deck.i===0 && narration.getAttribute('src') && narration.paused){ narration.play().then(()=>setPlayUI(true)).catch(()=>{}); } }
+window.addEventListener('load',autoplayFirst);
+function resumeOnce(){ autoplayFirst(); window.removeEventListener('pointerdown',resumeOnce); window.removeEventListener('keydown',resumeOnce); }
+window.addEventListener('pointerdown',resumeOnce);
+window.addEventListener('keydown',resumeOnce);
+</script>
+</body>
+</html>
